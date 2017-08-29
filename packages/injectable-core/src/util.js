@@ -1,6 +1,6 @@
 // @flow
 
-import type {Fn1,CurriedFn2} from 'basic-types'
+import type {Fn1,CurriedFn2} from './basic-types'
 import glob from 'glob'
 import {curry} from 'ramda'
 

@@ -1,4 +1,4 @@
-import {injectable, createCore} from '../'
+import {injectable, createCore} from '../index'
 let core
 beforeEach(()=> {
 	core = createCore()

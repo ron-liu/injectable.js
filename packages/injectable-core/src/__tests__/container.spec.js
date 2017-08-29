@@ -1,4 +1,4 @@
-import {createCore, tag, injectable, inject} from '..'
+import {createCore, tag, injectable, inject} from '../index'
 
 let core
 const createNewCore = () => core = createCore()

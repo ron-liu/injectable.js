@@ -1,4 +1,4 @@
-import {createCore} from '../'
+import {createCore} from '../index'
 
 let core
 beforeAll(()=> {

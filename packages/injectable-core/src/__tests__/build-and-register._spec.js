@@ -1,5 +1,4 @@
-import {expect, describe, it, expectException} from '../../__tests__/init.spec'
-import {buildAndAddService, getService, clear} from '../'
+import {buildAndAddService, getService, clear} from '../index'
 import {extractGraphql} from '../../graphqlize/inject'
 import {gqlToSchema} from '../../graphqlize/schema'
 import { makeExecutableSchema } from 'graphql-tools';
