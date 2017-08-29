@@ -41,3 +41,9 @@ expect(core.getService('average')({a:4, b:2})).toEqual(3)
   `yarn test`
 
 ## Contributing
+TOC
+
+## Things left
+* reduce
+* middlewares
+* document
