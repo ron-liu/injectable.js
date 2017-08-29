@@ -3,8 +3,9 @@ language: node_js
 node_js:
   - stable
 
-#install:
-#  - lerna bootstrap
+install:
+  - npm install
+  - lerna bootstrap
 
 env:
   - PACKAGE=injectable-core
