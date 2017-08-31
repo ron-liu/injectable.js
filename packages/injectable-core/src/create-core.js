@@ -2,17 +2,16 @@
 
 import type {
 	CreateCoreOption, Core, RawBizFunc, InjectedFunc, AddService, Middleware, Next,
-	ReplaceService, RemoveService, BatchAddService, BuildAndAddService
+	ReplaceService, RemoveService, BatchAddService, BuildAndAddService, InstallPlugin
 } from './types'
 import type {Fn1} from './basic-types'
-import {curry, ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals} from 'ramda'
+import {curry, ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty} from 'ramda'
 import invariant from 'invariant'
-import {loadFiles, then} from './util'
+import {then, loadFiles} from './util'
 import {injectable} from './tag'
-import {setPerRequestContext, getPerRequestContext, perRequestMiddleware} from './per-request'
 
 const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
-	const middlewares = [ ...(option.middlewares || []), perRequestMiddleware]
+	let middlewares = option.middlewares || []
 	const rawContainer : Map<string, RawBizFunc> = new Map()
 	const container: Map<string, InjectedFunc> = new Map()
 	
@@ -93,16 +92,21 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	
 	const buildAndAddService : BuildAndAddService
 		= ({name, option, func}) => addService(name, injectable(option)(func))
+	
+	const installPlugin: InstallPlugin = option => {
+		invariant(option && !isEmpty(option.middlewares), `should pass an option which at least has middlewares property`)
+		const {middlewares: newMiddlewares, services = {}} = option
+		
+		middlewares = [...middlewares, ...newMiddlewares]
+		mapObjIndexed((rawFunc, name) => addService(name, rawFunc), services)
+	}
 
 	addService('getService',
 		injectable()(
 			({}, {name, ...props}) => args => getService(name)({...props, ...args})
 		)
 	)
-	addService('setPerRequestContext', setPerRequestContext)
-	addService('getPerRequestContext', getPerRequestContext)
-	
-	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService}
+	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService, installPlugin}
 }
 
 export default createCore

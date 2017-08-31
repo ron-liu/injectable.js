@@ -1,4 +1,5 @@
-import { createCore, injectable, expressPerRequestMiddleware} from '..'
+import { createCore, injectable} from '../../../injectable-core/src/index'
+import perRequestPlugin, {expressPerRequestMiddleware} from '..'
 import express from 'express'
 import {over, lensProp, concat, pick, set} from 'ramda'
 import request from 'supertest-as-promised'
@@ -6,6 +7,7 @@ import request from 'supertest-as-promised'
 let core
 beforeEach(()=>{
 	core = createCore()
+	core.installPlugin(perRequestPlugin)
 })
 
 test('per request middlewares', async () => {

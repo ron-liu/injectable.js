@@ -1,0 +1,43 @@
+{
+  "name": "injectable-plugin-perrequest",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "repository": "git@github.com:ron-liu/injectable.git",
+  "scripts": {
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "injectable-core": "^0.0.3"
+  },
+  "author": "Ron Liu <ronliu2k@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "injectable-core": "0.0.3",
+    "ramda": "^0.24.1"
+  },
+  "devDependencies": {
+    "jest": "^20.0.4",
+    "jest-babel": "^1.0.1",
+    "express": "^4.15.4",
+    "supertest-as-promised": "^4.0.2",
+    "supertest": "^3.0.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-1": "^6.24.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-1",
+      "flow"
+    ]
+  },
+  "jest": {
+    "verbose": true,
+    "testMatch": [
+      "**/__tests__/*.spec.js"
+    ]
+  }
+}
