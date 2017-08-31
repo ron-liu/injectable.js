@@ -6,8 +6,7 @@ import request from 'supertest-as-promised'
 
 let core
 beforeEach(()=>{
-	core = createCore()
-	core.installPlugin(perRequestPlugin)
+	core = createCore({plugins: [perRequestPlugin]})
 })
 
 test('per request middlewares', async () => {

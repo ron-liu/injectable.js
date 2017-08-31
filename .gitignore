@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+/packages/injectable-core/dist/
+/packages/injectable-plugin-perRequest/dist/

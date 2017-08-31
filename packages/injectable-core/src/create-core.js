@@ -11,7 +11,8 @@ import {then, loadFiles} from './util'
 import {injectable} from './tag'
 
 const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
-	let middlewares = option.middlewares || []
+	let plugins = option.plugins|| []
+	let middlewares = []
 	const rawContainer : Map<string, RawBizFunc> = new Map()
 	const container: Map<string, InjectedFunc> = new Map()
 	
@@ -93,9 +94,9 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	const buildAndAddService : BuildAndAddService
 		= ({name, option, func}) => addService(name, injectable(option)(func))
 	
-	const installPlugin: InstallPlugin = option => {
-		invariant(option && !isEmpty(option.middlewares), `should pass an option which at least has middlewares property`)
-		const {middlewares: newMiddlewares, services = {}} = option
+	const installPlugin: InstallPlugin = plugin => {
+		invariant(plugin && !isEmpty(plugin.middlewares), `should pass an option which at least has middlewares property`)
+		const {middlewares: newMiddlewares, services = {}} = plugin
 		
 		middlewares = [...middlewares, ...newMiddlewares]
 		mapObjIndexed((rawFunc, name) => addService(name, rawFunc), services)
@@ -106,7 +107,9 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 			({}, {name, ...props}) => args => getService(name)({...props, ...args})
 		)
 	)
-	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService, installPlugin}
+	plugins.forEach(installPlugin)
+	
+	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService}
 }
 
 export default createCore
