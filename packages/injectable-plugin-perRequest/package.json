@@ -1,11 +1,13 @@
 {
   "name": "injectable-plugin-perrequest",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:ron-liu/injectable.git",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "npm run build",
+    "build": "babel src --ignore __tests__ --out-dir dist/ ; cp src/index.js dist/index.js.flow;"
   },
   "peerDependencies": {
     "injectable-core": "^0.0.4"
