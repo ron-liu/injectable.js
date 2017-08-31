@@ -9,9 +9,6 @@
     "prepublish": "npm run build",
     "build": "babel src --ignore __tests__ --out-dir dist/ ; cp src/index.js dist/index.js.flow;"
   },
-  "peerDependencies": {
-    "injectable-core": "^0.0.4"
-  },
   "author": "Ron Liu <ronliu2k@gmail.com>",
   "license": "MIT",
   "dependencies": {
