@@ -44,7 +44,9 @@ export type Core = {
 	buildAndAddService: BuildAndAddService
 }
 
-type Pattern = {
-	pattern: string,
-	ignores: Array<string>
+export type ReduceOption = {
+	filter: Fn1<RawBizFunc, Boolean>,
+	mapFn: Fn1<RawBizFunc, any>,
+	reducer: Fn2<any, any>,
+	empty: any
 }

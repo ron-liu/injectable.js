@@ -2,7 +2,7 @@
 
 import type {
 	CreateCoreOption, Core, RawBizFunc, InjectedFunc, AddService, Middleware, Next,
-	ReplaceService, RemoveService, BatchAddService, BuildAndAddService, InstallPlugin
+	ReplaceService, RemoveService, BatchAddService, BuildAndAddService, InstallPlugin, ReduceOption
 } from './types'
 import type {Fn1} from './basic-types'
 import {curry, ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty} from 'ramda'
@@ -101,6 +101,17 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		middlewares = [...middlewares, ...newMiddlewares]
 		mapObjIndexed((rawFunc, name) => addService(name, rawFunc), services)
 	}
+	
+	const reduce : ReduceOption
+		= ({filter, mapFn, reducer, empty}) => {
+		let ret = empty
+		for ( let item of rawContainer.entries()) {
+			if (filter(item)){
+				ret = reducer(mapFn(item), ret)
+			}
+		}
+		return ret
+	}
 
 	addService('getService',
 		injectable()(
@@ -109,7 +120,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	)
 	plugins.forEach(installPlugin)
 	
-	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService}
+	return {addService, getService, replaceService, removeService, batchAddServices, buildAndAddService, reduce}
 }
 
 export default createCore
