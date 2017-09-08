@@ -5,7 +5,7 @@ import type {
 	ReplaceService, RemoveService, BatchAddService, BuildAndAddService, InstallPlugin, ReduceOption
 } from './types'
 import type {Fn1} from './basic-types'
-import {curry, ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty} from 'ramda'
+import {ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty} from 'ramda'
 import invariant from 'invariant'
 import {then, loadFiles} from './util'
 import {injectable} from './tag'
@@ -27,7 +27,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		return next
 	}
 	
-	const addService : AddService = curry((name, func) => {
+	const addService : AddService = (name, func) => {
 		invariant(name, `name has not been passed in`)
 		invariant(func, `func has not been passed in`)
 		invariant(func.injectable, `the passing function ${name} should be injectable`)
@@ -37,7 +37,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		}
 		rawContainer.set(name, func)
 		// console.info(`service ${name} has been added to container`)
-	})
+	}
 	
 	const getService: Fn1<string, InjectedFunc> = ifElse(
 		x => container.get(x),
@@ -55,7 +55,6 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 					getService
 				))
 			)
-			
 			const biz = applyMiddlewares(middlewares)(injects, rawFunc)
 			
 			if (injects[serviceName]) injects[serviceName] = biz
@@ -72,14 +71,14 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		return originalService
 	}
 	
-	const replaceService: ReplaceService = curry((name, func) => {
+	const replaceService: ReplaceService = (name, func) => {
 		const originalService = removeService(name)
 		addService(name, func)
 		return () => {
 			removeService(name)
 			addService(name, originalService)
 		}
-	})
+	}
 	
 	const batchAddServices : BatchAddService = pipe(
 		concat(__, '/**/*.biz.js'),

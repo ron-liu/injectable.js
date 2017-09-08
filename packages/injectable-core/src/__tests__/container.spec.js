@@ -5,6 +5,13 @@ const createNewCore = () => core = createCore()
 
 beforeEach(createNewCore)
 
+test('service without args should be called successfully without args', async() => {
+	const getCode = injectable()(({}, _) => 123)
+	
+	core.addService('getCode', getCode)
+	expect(core.getService('getCode')()).toEqual(123)
+})
+
 test('basic addService and invoke should work', async () => {
 	const signIn = injectable()(({}, {userName, password}) => {
 		if (userName === 'ron') return 'xyz'
