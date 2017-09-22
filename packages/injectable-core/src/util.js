@@ -25,7 +25,6 @@ export const then : CurriedFn2<Fn1<any, any>, Promise<any>> = curry((fn, promise
 	return promise.then(fn)
 })
 
-
 type PassDown = CurriedFn2<Args, InjectedFunc, InjectedFunc>
 export const genPassDown : Fn1<string, PassDown>
 	= name =>　curry((argsFromUpService, injectedService) =>

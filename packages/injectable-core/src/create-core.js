@@ -36,7 +36,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 			throw new Error(`${name} has already been registered`)
 		}
 		rawContainer.set(name, func)
-		// console.info(`service ${name} has been added to container`)
+		console.info(`service ${name} has been added to container`)
 	}
 	
 	const getService: Fn1<string, InjectedFunc> = ifElse(
