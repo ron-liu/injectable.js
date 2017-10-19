@@ -1,6 +1,6 @@
 {
   "name": "injectable-plugin-perrequest",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "main": "dist/index.js",
   "repository": "git@github.com:ron-liu/injectable.git",
@@ -12,7 +12,7 @@
   "author": "Ron Liu <ronliu2k@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "injectable-core": "^0.0.9",
+    "injectable-core": "^0.0.10",
     "ramda": "^0.24.1"
   },
   "devDependencies": {
