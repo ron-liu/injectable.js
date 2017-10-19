@@ -82,7 +82,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	
 	const batchAddServices : BatchAddService = ifElse(
 		isNil,
-		()=>{},
+		()=>Promise.resolve(),
 		pipe(
 			pattern => loadFiles({pattern}),
 			then(map(require)),
