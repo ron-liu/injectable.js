@@ -1,7 +1,6 @@
-import {injectable} from '../../injectable-core/src/tag'
+import {injectable, genPassDown} from 'injectable-core'
 import {merge, pick, mapObjIndexed, curry, over, lensProp, concat, set} from 'ramda'
 export const PER_REQUEST_KEY_NAME = '__perRequestPropertyKey'
-import {genPassDown} from 'injectable-core'
 
 // It will hold req: perRequestStore across all different core instances
 // I didn't put it in core, should be ok

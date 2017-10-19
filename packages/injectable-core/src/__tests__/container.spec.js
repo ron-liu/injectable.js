@@ -49,7 +49,7 @@ test('addService a depend should work', async () => {
 })
 
 test('batch addService should work', async () => {
-	await core.batchAddServices(`${__dirname}/batch-register`)
+	await core.batchAddServices(`${__dirname}/batch-register/**/*.biz.js`)
 
 	expect(core.getService('average')({a:4, b:2})).toEqual(3)
 })

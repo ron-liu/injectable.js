@@ -5,7 +5,7 @@ import type {
 	ReplaceService, RemoveService, BatchAddService, BuildAndAddService, InstallPlugin, ReduceOption
 } from './types'
 import type {Fn1} from './basic-types'
-import {ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty} from 'ramda'
+import {ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equals, isEmpty, isNil, always} from 'ramda'
 import invariant from 'invariant'
 import {then, loadFiles} from './util'
 import {injectable} from './tag'
@@ -80,16 +80,18 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		}
 	}
 	
-	const batchAddServices : BatchAddService = pipe(
-		concat(__, '/**/*.biz.js'),
-		pattern => loadFiles({pattern}),
-		then(map(require)),
-		then(map(pipe(
-			pickBy(prop('injectable')),
-			mapObjIndexed((fn, name) => addService(name, fn))
-		)))
+	const batchAddServices : BatchAddService = ifElse(
+		isNil,
+		()=>{},
+		pipe(
+			pattern => loadFiles({pattern}),
+			then(map(require)),
+			then(map(pipe(
+				pickBy(prop('injectable')),
+				mapObjIndexed((fn, name) => addService(name, fn))
+			)))
+		)
 	)
-	
 	const buildAndAddService : BuildAndAddService
 		= ({name, option, func}) => addService(name, injectable(option)(func))
 	
