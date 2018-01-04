@@ -1,9 +1,10 @@
 // @flow
 
-import type {Fn1,CurriedFn2} from './basic-types'
+import type {Fn1, CurriedFn2} from './basic-types'
 import glob from 'glob'
-import {merge, pick, curry} from 'ramda'
-import type {Args, InjectedFunc} from "./types";
+import {prop, merge, pick, curry, over, lensProp, pipe,isNil, when, __, path} from 'ramda'
+import type {Args, InjectedFunc} from "./types"
+const OPTIONS_KEY = '__INJECTABLE_ARGS_OPTIONS__'
 
 type Pattern = {
 	pattern: string,
@@ -25,9 +26,19 @@ export const then : CurriedFn2<Fn1<any, any>, Promise<any>> = curry((fn, promise
 	return promise.then(fn)
 })
 
+export const addOptionIntoArgs: CurriedFn2<string, mixed, mixed, void>
+	= curry((name, value, args) => pipe(
+		over(lensProp(OPTIONS_KEY), when(isNil, ()=>{})),
+		over(lensProp(OPTIONS_KEY), merge(__, {[name]: value}) )
+	)(args))
+
 type PassDown = CurriedFn2<Args, InjectedFunc, InjectedFunc>
 export const genPassDown : Fn1<string, PassDown>
-	= name =>　curry((argsFromUpService, injectedService) =>
-	args =>
-		injectedService(merge(args, pick([name], argsFromUpService)))
+	= name =>　curry((argsFromUpService, injectedService) => args => injectedService(addOptionIntoArgs(name, path([ OPTIONS_KEY, name], argsFromUpService), args))
 )
+
+export const getOptionFromArgs: CurriedFn2<string, mixed, mixed>
+	= curry((name, args) => {
+		const options = prop(OPTIONS_KEY, args) || {}
+		return prop(name, options)
+})

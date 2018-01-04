@@ -1,5 +1,5 @@
-import {injectable, genPassDown} from 'injectable-core'
-import {merge, pick, mapObjIndexed, curry, over, lensProp, concat, set} from 'ramda'
+import {injectable, genPassDown, getOptionFromArgs, addOptionIntoArgs} from 'injectable-core'
+import {merge, pick, mapObjIndexed, lensProp, set} from 'ramda'
 export const PER_REQUEST_KEY_NAME = '__perRequestPropertyKey'
 
 // It will hold req: perRequestStore across all different core instances
@@ -7,14 +7,17 @@ export const PER_REQUEST_KEY_NAME = '__perRequestPropertyKey'
 const store = new WeakMap()
 
 const setPerRequestContext = injectable()
-(({}, {[PER_REQUEST_KEY_NAME]: key = {}, name, value}) => {
+(({}, {name, value, ...args}) => {
+	const key = getOptionFromArgs(PER_REQUEST_KEY_NAME, args)
 	if (!store.get(key)) store.set(key, {})
 	return store.set(key, set(lensProp(name), value, store.get(key)))
 })
 
 const getPerRequestContext = injectable()
-(({}, {[PER_REQUEST_KEY_NAME]: key = {}, name}) => {
-	if (!store.get(key)) return null
+(({}, {name, ...args}) => {
+	const key = getOptionFromArgs(PER_REQUEST_KEY_NAME, args)
+
+  if (!store.get(key)) return null
 	return store.get(key)[name]
 })
 
@@ -31,13 +34,13 @@ export default {
 }
 
 export const expressPerRequestMiddleware = core => (req, res, next) => {
-	req.core = {
-		...core,
-		getService: name => {
-			const service = core.getService(name)
-			return args => service({...(args || {}), [PER_REQUEST_KEY_NAME]: req})
-		}
-	}
-	next()
+  req.core = {
+    ...core,
+    getService: name => {
+      const service = core.getService(name)
+      return args => service(addOptionIntoArgs(PER_REQUEST_KEY_NAME, req, args))
+    }
+  }
+  next()
 }
 

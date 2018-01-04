@@ -9,7 +9,7 @@ beforeEach(()=>{
 	core = createCore({plugins: [perRequestPlugin]})
 })
 
-test('per request middlewares', async () => {
+it('per request middlewares', async () => {
 	const app = express()
 	
 	const setToken = injectable(
@@ -38,26 +38,33 @@ test('per request middlewares', async () => {
 
 	const tokenMiddleware = (req, res, next) => {
 		const {core} = req
-		core.getService('setToken')({token: req.get('Authorization')})
-		const token = core.getService('getPerRequestContext')({name: 'token'})
-		
-		core.getService('setPerRequestContext')({name: 'currentUser', value: `${token}abc`})
-		next()
+		try {
+      core.getService('setToken')({token: req.get('Authorization')})
+      const token = core.getService('getPerRequestContext')({name: 'token'})
+
+      core.getService('setPerRequestContext')({name: 'currentUser', value: `${token}abc`})
+      next()
+		}
+		catch(e) {
+			console.error(e.stack)
+			next(e)
+		}
 	}
+	app.use( (err, req, res, next) => {
+		console.error(3333, e)
+    if (res.headersSent) {
+      return next(err)
+    }
+    console.error(err)
+    res.status(500)
+    res.render('error', { error: err })
+	})
 
 	app.get('/', expressPerRequestMiddleware(core), tokenMiddleware, (req, res) => {
 		const {core} = req
-		setTimeout(() => {
-			res.send({user: core.getService('getCurrentUser')({})})
-		}, 10)
+    res.send({user: core.getService('getCurrentUser')({})})
 	})
 
-	app.get('/via-get-service', (req, res) => {
-		setTimeout(() => {
-			res.send({user: req.core.getService('getCurrentUserViaGetService')({})})
-		}, 10)
-	})
-	
 	await request(app)
 	.get('/')
 	.set({Authorization: 'ron'})

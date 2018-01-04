@@ -12,10 +12,10 @@
   "author": "Ron Liu <ronliu2k@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "injectable-core": "^0.0.10",
     "ramda": "^0.24.1"
   },
   "devDependencies": {
+    "injectable-core": "^0.0.11",
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
@@ -25,6 +25,9 @@
     "jest-babel": "^1.0.1",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2"
+  },
+  "peerDependencies": {
+    "injectable-core": "^0.0.11"
   },
   "babel": {
     "presets": [
