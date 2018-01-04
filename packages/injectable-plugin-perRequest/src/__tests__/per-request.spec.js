@@ -51,7 +51,6 @@ it('per request middlewares', async () => {
 		}
 	}
 	app.use( (err, req, res, next) => {
-		console.error(3333, e)
     if (res.headersSent) {
       return next(err)
     }

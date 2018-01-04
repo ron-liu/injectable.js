@@ -4,7 +4,7 @@ import type {Fn1, CurriedFn2} from './basic-types'
 import glob from 'glob'
 import {prop, merge, pick, curry, over, lensProp, pipe,isNil, when, __, path} from 'ramda'
 import type {Args, InjectedFunc} from "./types"
-const OPTIONS_KEY = '__INJECTABLE_ARGS_OPTIONS__'
+export const OPTIONS_KEY = '__INJECTABLE_ARGS_OPTIONS__'
 
 type Pattern = {
 	pattern: string,
