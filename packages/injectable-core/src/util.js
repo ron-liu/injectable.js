@@ -34,7 +34,7 @@ export const addOptionIntoArgs: CurriedFn2<string, mixed, mixed, void>
 
 type PassDown = CurriedFn2<Args, InjectedFunc, InjectedFunc>
 export const genPassDown : Fn1<string, PassDown>
-	= name =>　curry((argsFromUpService, injectedService) => args => injectedService(addOptionIntoArgs(name, path([ OPTIONS_KEY, name], argsFromUpService), args))
+	= name =>　curry((argsFromUpService, injectedService) => (args = {}) => injectedService(addOptionIntoArgs(name, path([ OPTIONS_KEY, name], argsFromUpService), args))
 )
 
 export const getOptionFromArgs: CurriedFn2<string, mixed, mixed>
