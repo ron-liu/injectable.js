@@ -1,4 +1,4 @@
-import {injectable, genPassDown, getOptionFromArgs, addOptionIntoArgs} from 'injectable-core'
+import {injectable, getOptionFromArgs, addOptionIntoArgs} from 'injectable-core'
 import {merge, pick, mapObjIndexed, lensProp, set} from 'ramda'
 export const PER_REQUEST_KEY_NAME = '__perRequestPropertyKey'
 
@@ -9,6 +9,7 @@ const store = new WeakMap()
 const setPerRequestContext = injectable()
 (({}, {name, value, ...args}) => {
 	const key = getOptionFromArgs(PER_REQUEST_KEY_NAME, args)
+  if (!key) throw Error(`there is no per request key in arguments, make sure you already put req as per request key in the argument`)
 	if (!store.get(key)) store.set(key, {})
 	return store.set(key, set(lensProp(name), value, store.get(key)))
 })
@@ -21,15 +22,8 @@ const getPerRequestContext = injectable()
 	return store.get(key)[name]
 })
 
-const passDown = genPassDown(PER_REQUEST_KEY_NAME)
-
-const perRequestMiddleware = next => (injects, rawFunc) => args => {
-	const decoratedInjects = mapObjIndexed( passDown(args), injects)
-	return next(decoratedInjects, rawFunc)(args)
-}
-
 export default {
-	middlewares: [perRequestMiddleware],
+	middlewares: [],
 	services: {setPerRequestContext, getPerRequestContext}
 }
 

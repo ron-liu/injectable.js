@@ -9,10 +9,11 @@ import {ifElse, zipObj, pipe, concat, pickBy, prop, mapObjIndexed, __, map, equa
 import invariant from 'invariant'
 import {then, loadFiles} from './util'
 import {injectable} from './tag'
+import {passDownAllOptionsPlugin} from "./plugin-pass-down-all-options";
 
 const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	let plugins = option.plugins|| []
-	let middlewares = []
+	let middlewares = [passDownAllOptionsPlugin]
 	const rawContainer : Map<string, RawBizFunc> = new Map()
 	const container: Map<string, InjectedFunc> = new Map()
 	
@@ -96,8 +97,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 		= ({name, option, func}) => addService(name, injectable(option)(func))
 	
 	const installPlugin: InstallPlugin = plugin => {
-		invariant(plugin && !isEmpty(plugin.middlewares), `should pass an option which at least has middlewares property`)
-		const {middlewares: newMiddlewares, services = {}} = plugin
+		const {middlewares: newMiddlewares = [], services = {}} = plugin
 		
 		middlewares = [...middlewares, ...newMiddlewares]
 		mapObjIndexed((rawFunc, name) => addService(name, rawFunc), services)

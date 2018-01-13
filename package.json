@@ -1,12 +1,13 @@
 {
   "devDependencies": {
-    "lerna": "^2.1.1",
-    "jest": "^20.0.4",
-    "jest-babel": "^1.0.1",
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
-    "babel-preset-stage-1": "^6.24.1"
+    "babel-preset-stage-1": "^6.24.1",
+    "flow-bin": "^0.63.1",
+    "jest": "^20.0.4",
+    "jest-babel": "^1.0.1",
+    "lerna": "^2.1.1"
   },
   "babel": {
     "presets": [
@@ -15,5 +16,4 @@
       "flow"
     ]
   }
-
 }
