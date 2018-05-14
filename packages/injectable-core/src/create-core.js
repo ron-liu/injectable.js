@@ -14,6 +14,7 @@ import {passDownAllOptionsPlugin} from "./plugin-pass-down-all-options";
 const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 	let plugins = option.plugins|| []
 	let middlewares = [passDownAllOptionsPlugin]
+  const log = option.log || (() => {})
 	const rawContainer : Map<string, RawBizFunc> = new Map()
 	const container: Map<string, InjectedFunc> = new Map()
 	
@@ -37,7 +38,7 @@ const createCore: Fn1<CreateCoreOption, Core> = (option = {}) => {
 			throw new Error(`${name} has already been registered`)
 		}
 		rawContainer.set(name, func)
-		console.info(`service ${name} has been added to container`)
+		log(`service ${name} has been added to container`)
 	}
 	
 	const getService: Fn1<string, InjectedFunc> = ifElse(
